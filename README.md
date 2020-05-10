@@ -1,5 +1,7 @@
 # Service TTL
 
+![build](https://github.com/bertrandmartel/service-ttl/workflows/build/badge.svg) [![License](http://img.shields.io/:license-mit-blue.svg)](LICENSE.md)
+
 API server with the ability to launch a background service (or a set of commands) for a fixed period of time.
 
 For instance a `POST /start` will :
@@ -16,7 +18,7 @@ This is useful for service you don't want to be up all the time to save CPU and 
 * run
 
 ```bash
-./service-ttl -port=6005 -config=$(pwd)/config.json
+./service-ttl -port=6005 -config=$(pwd)/config.json -timeoutMinutes=30
 ```
 
 ## Configuration file
@@ -28,6 +30,7 @@ Example for the json configuration file :
   "version": "0.1",
   "port": 6005,
   "serverPath": "http://localhost",
+  "timeoutMinutes": 30,
   "commands": [{
     "binary": "v4l2-ctl",
     "params": ["--set-fmt-video=width=1920,height=1080,pixelformat=H264,field=4"]
@@ -62,7 +65,7 @@ Description=TTL Service
 After=network-online.target
  
 [Service]
-ExecStart=/bin/service-ttl -port=6005 -config=/etc/service-ttl/config.json
+ExecStart=/bin/service-ttl -port=6005 -config=/etc/service-ttl/config.json -timeoutMinutes=30
 StandardOutput=inherit
 StandardError=inherit
 Restart=always

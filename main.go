@@ -24,21 +24,24 @@ type Command struct {
 type Config struct {
 	Version    string    `json:"version"`
 	Port       int       `json:"port"`
+	Timeout    int       `json:"timeoutMinutes"`
 	ServerPath string    `json:"serverPath"`
 	Commands   []Command `json:"commands"`
 }
 
 var running = false
-var timeoutMinutes = 1
+var timeoutMinutes = 30
 var serviceExp = time.Now().Local().Add(time.Minute * time.Duration(timeoutMinutes))
 var cmd *exec.Cmd = nil
 
 func main() {
 	portPtr := flag.Int("port", -1, "enter port")
 	configFilePathPtr := flag.String("config", "config.json", "enter config file path")
+	timeoutMinutesPtr := flag.Int("timeoutMinutes", -1, "enter service expiration time in minutes")
 	flag.Parse()
 	port := *portPtr
 	configFilePath := *configFilePathPtr
+	timeoutMinutes := *timeoutMinutesPtr
 	var config Config
 	err := ParseConfig(&config, configFilePath)
 	if err != nil {
@@ -47,6 +50,9 @@ func main() {
 	}
 	if port != -1 {
 		config.Port = port
+	}
+	if timeoutMinutes != -1 {
+		config.Timeout = timeoutMinutes
 	}
 	go monitorExpiration()
 	e := echo.New()
