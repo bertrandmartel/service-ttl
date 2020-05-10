@@ -4,6 +4,7 @@ clean:
 
 build: clean
 	go build -o service-ttl
+	env GOOS=linux GOARCH=arm GOARM=5 go build -o service-ttl-arm
 
 run:
 	goimports -w .
