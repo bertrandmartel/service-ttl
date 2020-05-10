@@ -1,0 +1,20 @@
+on: [push, pull_request]
+name: build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install Go
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13.x
+    - name: Checkout code
+      uses: actions/checkout@v1
+    - name: Install golangci-lint
+      run: |
+        GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@v1.25.1
+    - name: Run linters
+      run: |
+        export PATH=$PATH:$(go env GOPATH)/bin   
+        ./pre-commit
+        make build

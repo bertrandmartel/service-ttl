@@ -1,0 +1,12 @@
+{
+  "version": "0.1",
+  "port": 6005,
+  "serverPath": "http://localhost",
+  "commands": [{
+    "binary": "echo",
+    "params": ["\"test\""]
+  },{
+    "binary":"vlc",
+    "params": []
+  }]
+}
